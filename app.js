@@ -1,25 +1,31 @@
-const models = require("./models");
-function createUser() {
-  const user = models.User.build({
-    name: 'Danielle Palmer',
-    email: 'daniellzpalmer@gamil.com',
-    bio: 'student'
-  });
-  user.save().then(function (newUser) {
-    console.log(newUser.dataValues);
-  })
-}
-createUser();
+const bodyParser = require('body-parser'),
+      express = require('express'),
+      mustache = require('mustache'),
+      mustacheExpress = require('mustache-express'),
+      sequelize = require('sequelize');
+const app = express();
 
- //^^^^^C OF CRUD^^^^^//
+app.engine('mustache', mustacheExpress());
+app.set('views', './views');
+app.set('view engine', 'mustache');
 
- function listUsers() {
-   models.User.findAll().then(function(users) {
-     users.forEach(function(user) {
-       console.log(user.dataValues);
-     })
-   })
- }
- listUsers();
+app.use(bodyParser.urlencoded({extended: false}));
 
-//^^^^^R OF CRUD^^^^^//
+app.get('/', function(req, res) {
+    res.render("index");
+})
+
+app.listen(3000, function() {
+    console.log('Express running on http://localhost:3000/.')
+});
+
+process.on('SIGINT', function() {
+  console.log("\nshutting down");
+  const index = require('./models/index')
+  index.sequelize.close()
+
+  setTimeout(function() {
+    console.log('process exit');
+    process.exit(0);
+  }, 1000)
+});
