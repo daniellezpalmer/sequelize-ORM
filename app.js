@@ -1,22 +1,32 @@
 const bodyParser = require('body-parser'),
-      express = require('express'),
-      mustache = require('mustache'),
-      mustacheExpress = require('mustache-express'),
-      sequelize = require('sequelize');
+  express = require('express'),
+  mustache = require('mustache'),
+  mustacheExpress = require('mustache-express'),
+  sequelize = require('sequelize');
+  models = require('./models');
 const app = express();
 
 app.engine('mustache', mustacheExpress());
 app.set('views', './views');
 app.set('view engine', 'mustache');
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 app.get('/', function(req, res) {
-    res.render("index");
+  res.render("index");
+})
+
+app.get('/users', function(req, res) {
+  models.User.findAll()
+  .then(function(usersList){
+    res.render('users', {users: usersList});
+  })
 })
 
 app.listen(3000, function() {
-    console.log('Express running on http://localhost:3000/.')
+  console.log('Express running on http://localhost:3000/.')
 });
 
 process.on('SIGINT', function() {
