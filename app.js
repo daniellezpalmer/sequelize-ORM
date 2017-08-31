@@ -31,6 +31,22 @@ app.get('/user', function(req, res) {
   res.render('new_user');
 })
 
+app.get('/update_user/:id', function(req, res) {
+  models.User.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
+    .then(function(user) {
+      res.render('update_user', {
+        name: user.name,
+        email: user.email,
+        bio: user.bio,
+        id: user.id
+      })
+    })
+})
+
 app.post('/create_user', function(req, res) {
   const userToCreate = models.User.build({
     name: req.body.name,
@@ -40,6 +56,21 @@ app.post('/create_user', function(req, res) {
   userToCreate.save().then(function() {
     res.redirect('/users')
   })
+})
+
+app.post('/update_user/:id', function(req, res) {
+  models.User.update({
+      name: req.body.name,
+      email: req.body.email,
+      bio: req.body.bio
+    }, {
+      where: {
+        id: req.params.id
+      }
+    })
+    .then(function() {
+      res.redirect('/users')
+    })
 })
 
 app.post('/delete_user/:id', function(req, res) {

@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Users</title>
-  </head>
-  <body>
-    <h1>Users</h1>
-    <a href="/user">Add a user!</a>
-    {{#users}}
-      <p>{{name}}</p>
-      <p>{{email}}</p>
-      <p>{{bio}}</p>
-      <form class="" action="/delete_user/{{id}}" method="post">
-        <button type="submit" name="submit">Delete</button>
-      </form>
-    {{/users}}
-  </body>
+<head>
+  <meta charset="utf-8">
+  <title>Users</title>
+</head>
+
+<body>
+  <h1>Users</h1>
+  <a href="/user">Add a user!</a>
+  {{#users}}
+    <p><a href="/update_user/{{id}}">{{name}}</a></p>
+    <p>{{email}}</p>
+    <p>{{bio}}</p>
+    <form class="" action="/delete_user/{{id}}" method="post">
+      <button type="submit" name="submit">Delete</button>
+    </form>
+  {{/users}}
+</body>
+
 </html>
