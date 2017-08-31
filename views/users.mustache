@@ -5,10 +5,15 @@
     <title>Users</title>
   </head>
   <body>
+    <h1>Users</h1>
+    <a href="/user">Add a user!</a>
     {{#users}}
       <p>{{name}}</p>
       <p>{{email}}</p>
       <p>{{bio}}</p>
+      <form class="" action="/delete_user/{{id}}" method="post">
+        <button type="submit" name="submit">Delete</button>
+      </form>
     {{/users}}
   </body>
 </html>

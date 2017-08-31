@@ -3,7 +3,7 @@ const bodyParser = require('body-parser'),
   mustache = require('mustache'),
   mustacheExpress = require('mustache-express'),
   sequelize = require('sequelize');
-  models = require('./models');
+models = require('./models');
 const app = express();
 
 app.engine('mustache', mustacheExpress());
@@ -20,8 +20,35 @@ app.get('/', function(req, res) {
 
 app.get('/users', function(req, res) {
   models.User.findAll()
-  .then(function(usersList){
-    res.render('users', {users: usersList});
+    .then(function(usersList) {
+      res.render('users', {
+        users: usersList
+      });
+    })
+})
+
+app.get('/user', function(req, res) {
+  res.render('new_user');
+})
+
+app.post('/create_user', function(req, res) {
+  const userToCreate = models.User.build({
+    name: req.body.name,
+    email: req.body.email,
+    bio: req.body.bio
+  });
+  userToCreate.save().then(function() {
+    res.redirect('/users')
+  })
+})
+
+app.post('/delete_user/:id', function(req, res) {
+  models.User.destroy({
+    where: {
+      id: req.params.id
+    }
+  }).then(function() {
+    res.redirect('/users')
   })
 })
 
